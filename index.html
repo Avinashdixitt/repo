@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Avinash Dixit | Ph.D. Research Scholar</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 :root{
     --primary:#1e3a8a;
     --secondary:#2563eb;
@@ -40,6 +42,8 @@ body{
     max-width:1200px;
     margin:auto;
 }
+
+/* ================= HEADER ================= */
 
 header{
     background:linear-gradient(135deg,var(--primary),var(--secondary));
@@ -79,7 +83,14 @@ header p{
     text-decoration:none;
     margin:0 10px;
     font-weight:500;
+    transition:opacity 0.3s;
 }
+
+.links a:hover{
+    opacity:0.75;
+}
+
+/* ================= SECTIONS ================= */
 
 section{
     background:white;
@@ -97,17 +108,38 @@ h2{
     padding-bottom:5px;
 }
 
+/* ================= GRID ================= */
+
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:20px;
 }
 
+/* ================= CARDS ================= */
+
 .card{
     background:#eff6ff;
-    padding:20px;
+    padding:22px;
     border-radius:12px;
+    transition:transform 0.25s, box-shadow 0.25s;
 }
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 25px rgba(0,0,0,0.10);
+}
+
+.card h3{
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+.card p{
+    margin-bottom:8px;
+}
+
+/* ================= TAGS ================= */
 
 .tags{
     display:flex;
@@ -124,6 +156,8 @@ h2{
     font-weight:500;
 }
 
+/* ================= LIST ================= */
+
 ul{
     padding-left:20px;
 }
@@ -131,6 +165,34 @@ ul{
 li{
     margin-bottom:10px;
 }
+
+/* ================= PROJECT BUTTONS ================= */
+
+.project-button{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 18px;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:500;
+    transition:transform 0.2s, opacity 0.2s;
+}
+
+.project-button:hover{
+    transform:translateY(-2px);
+    opacity:0.9;
+}
+
+.kmeans-button{
+    background:#2563eb;
+}
+
+.fuzzy-button{
+    background:#059669;
+}
+
+/* ================= FOOTER ================= */
 
 footer{
     background:#0f172a;
@@ -140,352 +202,565 @@ footer{
     margin-top:40px;
 }
 
+footer p{
+    margin:5px 0;
+}
+
+/* ================= MOBILE ================= */
+
 @media(max-width:768px){
 
-header h1{
-    font-size:2rem;
+    header{
+        padding:60px 20px;
+    }
+
+    header h1{
+        font-size:2rem;
+    }
+
+    .profile{
+        width:140px;
+        height:140px;
+    }
+
+    section{
+        padding:20px;
+    }
+
+    .links a{
+        display:inline-block;
+        margin:5px 7px;
+    }
+
 }
 
-.profile{
-    width:140px;
-    height:140px;
-}
-
-section{
-    padding:20px;
-}
-
-}
 </style>
 
 </head>
 
+
 <body>
+
+
+<!-- ================= HEADER ================= -->
 
 <header>
 
-<img src="Untitled design.jpg" alt="Avinash Dixit" class="profile">
+    <img src="Untitled design.jpg"
+         alt="Avinash Dixit"
+         class="profile">
 
-<h1>Avinash Dixit</h1>
+    <h1>Avinash Dixit</h1>
 
-<h3>Ph.D. Research Scholar</h3>
+    <h3>Ph.D. Research Scholar</h3>
 
-<p>Department of Computer Science and Engineering</p>
-<p>Indian Institute of Technology Indore</p>
-<p>Research Supervisor: Prof. Surya Prakash</p>
+    <p>Department of Computer Science and Engineering</p>
 
-<div class="links">
-<a href="mailto:phd2501201003@iiti.ac.in">Email</a>
-<a href="https://github.com/Avinashdixitt" target="_blank">GitHub</a>
-<a href="https://linkedin.com/in/avinashdixitt" target="_blank">LinkedIn</a>
-<a href="https://scholar.google.com/citations?hl=en&user=si_iw6sAAAAJ&view" target="_blank">Google Scholar</a>
-<a href="https://orcid.org/0009-0008-3530-5820" target="_blank">ORCID</a>
-</div>
+    <p>Indian Institute of Technology Indore</p>
+
+    <p>Research Supervisor: Prof. Surya Prakash</p>
+
+    <div class="links">
+
+        <a href="mailto:phd2501201003@iiti.ac.in">
+            Email
+        </a>
+
+        <a href="https://github.com/Avinashdixitt"
+           target="_blank">
+            GitHub
+        </a>
+
+        <a href="https://linkedin.com/in/avinashdixitt"
+           target="_blank">
+            LinkedIn
+        </a>
+
+        <a href="https://scholar.google.com/citations?hl=en&user=si_iw6sAAAAJ&view"
+           target="_blank">
+            Google Scholar
+        </a>
+
+        <a href="https://orcid.org/0009-0008-3530-5820"
+           target="_blank">
+            ORCID
+        </a>
+
+    </div>
 
 </header>
 
+
 <div class="container">
 
-<section>
-<h2>About Me</h2>
 
-<p>
-I am a Ph.D. Research Scholar in the Department of Computer Science and Engineering at IIT Indore under the supervision of Prof. Surya Prakash. My research focuses on Livestock Biometrics, Computer Vision, Deep Learning, Artificial Intelligence, and Pattern Recognition. Prior to joining IIT Indore, I completed my B.Tech in Computer Science and Engineering and worked as a Software Engineer at Round The Clock Technologies. I have also gained industrial experience through internships in Machine Learning, Internet of Things (IoT), and Robotics.
-</p>
+<!-- ================= ABOUT ================= -->
+
+<section>
+
+    <h2>About Me</h2>
+
+    <p>
+        I am a Ph.D. Research Scholar in the Department of Computer
+        Science and Engineering at IIT Indore under the supervision
+        of Prof. Surya Prakash. My research focuses on Livestock
+        Biometrics, Computer Vision, Deep Learning, Artificial
+        Intelligence, and Pattern Recognition. Prior to joining IIT
+        Indore, I completed my B.Tech in Computer Science and
+        Engineering and worked as a Software Engineer at Round The
+        Clock Technologies. I have also gained industrial experience
+        through internships in Machine Learning, Internet of Things
+        (IoT), and Robotics.
+    </p>
 
 </section>
 
-<section>
 
-<h2>Research Interests</h2>
-
-<div class="tags">
-
-<div class="tag">Livestock Biometrics</div>
-<div class="tag">Computer Vision</div>
-<div class="tag">Deep Learning</div>
-<div class="tag">Artificial Intelligence</div>
-<div class="tag">Pattern Recognition</div>
-
-</div>
-
-</section>
+<!-- ================= RESEARCH INTERESTS ================= -->
 
 <section>
 
-<h2>Education</h2>
+    <h2>Research Interests</h2>
 
-<div class="grid">
+    <div class="tags">
 
-<div class="card">
-<h3>Ph.D. in CSE</h3>
-<p>Indian Institute of Technology Indore</p>
-<p>2025 – Present</p>
-</div>
+        <div class="tag">Livestock Biometrics</div>
 
-<div class="card">
-<h3>B.Tech in CSE</h3>
-<p>Raj Kumar Goel Institute of Technology</p>
-<p>2021 – 2025</p>
-</div>
+        <div class="tag">Computer Vision</div>
 
-<div class="card">
-<h3>School Education</h3>
-<p>Jawahar Navodaya Vidyalaya</p>
-</div>
+        <div class="tag">Deep Learning</div>
 
-</div>
+        <div class="tag">Artificial Intelligence</div>
 
-</section>
-
-<section>
-
-<h2>Professional Experience</h2>
-
-<ul>
-
-<li><strong>Software Engineer</strong> – Round The Clock Technologies</li>
-
-<li><strong>Machine Learning Intern</strong> – Infosys Springboard</li>
-
-<li><strong>IoT Intern</strong> – NASSCOM FutureSkills Prime</li>
-
-<li><strong>Robotics Intern</strong> – Kodacy</li>
-
-</ul>
-
-</section>
-
-<section>
-
-<h2>Research Projects</h2>
-
-<div class="grid">
-
-    <!-- Livestock Biometric Identification -->
-
-    <div class="card">
-        <h3>Livestock Biometric Identification Systems</h3>
-
-        <p>
-            AI-based cattle identification using muzzle biometrics,
-            computer vision, deep learning, and robust feature
-            representation.
-        </p>
-    </div>
-
-
-    <!-- K-MEANS CLUSTERING -->
-
-    <div class="card">
-
-        <h3>K-Means Clustering Demo</h3>
-
-        <p>
-            Interactive step-by-step demonstration of K-Means
-            clustering, including distance calculation,
-            cluster assignment, mean calculation, centroid
-            updates, and convergence.
-        </p>
-
-        <a href="kmeans_demo.html"
-           target="_blank"
-           style="
-           display:inline-block;
-           margin-top:12px;
-           padding:10px 18px;
-           background:#2563eb;
-           color:white;
-           text-decoration:none;
-           border-radius:8px;
-           font-weight:500;">
-           
-           Open K-Means Demo →
-           
-        </a>
+        <div class="tag">Pattern Recognition</div>
 
     </div>
 
+</section>
 
-    <!-- FUZZY C-MEANS -->
 
-    <div class="card">
+<!-- ================= EDUCATION ================= -->
 
-        <h3>Fuzzy C-Means Clustering Demo</h3>
+<section>
 
-        <p>
-            Interactive demonstration of Fuzzy C-Means clustering
-            with membership values, distance calculations,
-            weighted mean, centroid updates, and convergence
-            at every iteration.
-        </p>
+    <h2>Education</h2>
 
-        <a href="fuzzy_c_means_demo.html"
-           target="_blank"
-           style="
-           display:inline-block;
-           margin-top:12px;
-           padding:10px 18px;
-           background:#059669;
-           color:white;
-           text-decoration:none;
-           border-radius:8px;
-           font-weight:500;">
-           
-           Open Fuzzy C-Means Demo →
-           
-        </a>
+    <div class="grid">
+
+        <div class="card">
+
+            <h3>Ph.D. in CSE</h3>
+
+            <p>
+                Indian Institute of Technology Indore
+            </p>
+
+            <p>
+                2025 – Present
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>B.Tech in CSE</h3>
+
+            <p>
+                Raj Kumar Goel Institute of Technology
+            </p>
+
+            <p>
+                2021 – 2025
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>School Education</h3>
+
+            <p>
+                Jawahar Navodaya Vidyalaya
+            </p>
+
+        </div>
 
     </div>
 
-</div>
-
-<div class="card">
-<h3>MediScan – AI Powered Healthcare Application</h3>
-<p>
-AI-based healthcare application developed using machine learning
-and intelligent analysis.
-</p>
-</div>
-
-<div class="card">
-<h3>Real Estate Price Prediction</h3>
-<p>
-Machine learning based real estate price prediction system.
-</p>
-</div>
-
-<div class="card">
-<h3>Sports Celebrity Image Classification</h3>
-<p>
-Computer vision and deep learning based image classification project.
-</p>
-</div>
-
-<div class="card">
-<h3>IoT Based Smart Solutions</h3>
-<p>
-Internet of Things based solutions for smart applications.
-</p>
-</div>
-
-<div class="card">
-<h3>Robotics and Embedded Systems Projects</h3>
-<p>
-Projects involving robotics, embedded systems, automation, and intelligent
-control.
-</p>
-</div>
-
-</div>
-
 </section>
-```
 
-<h2>Leadership & Activities</h2>
 
-<ul>
-
-<li>Secretary – IEEE Student Branch RKGIT</li>
-
-<li>Graphic Designer – IEEE Student Branch RKGIT</li>
-
-<li>Academic Head – Light De Literacy</li>
-
-<li>Anchoring and Event Management Activities</li>
-
-<li>Volunteer and Student Leadership Initiatives</li>
-
-</ul>
-
-</section>
+<!-- ================= PROFESSIONAL EXPERIENCE ================= -->
 
 <section>
 
-<h2>Certifications</h2>
+    <h2>Professional Experience</h2>
 
-<ul>
+    <ul>
 
-<li>AWS Machine Learning Certification</li>
+        <li>
+            <strong>Software Engineer</strong>
+            – Round The Clock Technologies
+        </li>
 
-<li>Infosys Springboard Certifications</li>
+        <li>
+            <strong>Machine Learning Intern</strong>
+            – Infosys Springboard
+        </li>
 
-<li>IoT Internship Certification</li>
+        <li>
+            <strong>IoT Intern</strong>
+            – NASSCOM FutureSkills Prime
+        </li>
 
-<li>Robotics Internship Certification</li>
+        <li>
+            <strong>Robotics Intern</strong>
+            – Kodacy
+        </li>
 
-<li>NCC B Certificate</li>
-
-</ul>
+    </ul>
 
 </section>
+
+
+<!-- ================= RESEARCH PROJECTS ================= -->
 
 <section>
 
-<h2>Achievements & Awards</h2>
+    <h2>Research Projects</h2>
 
-<ul>
+    <div class="grid">
 
-<li>Ph.D. Research Scholar – IIT Indore</li>
 
-<li>GATE CS Qualified</li>
+        <!-- LIVESTOCK BIOMETRICS -->
 
-<li>NCC B Certificate Holder</li>
+        <div class="card">
 
-<li>Rajya Puraskar (Scouts & Guides)</li>
+            <h3>
+                Livestock Biometric Identification Systems
+            </h3>
 
-<li>Best Drill Award</li>
+            <p>
+                AI-based cattle identification using muzzle
+                biometrics, computer vision, deep learning,
+                and robust feature representation.
+            </p>
 
-<li>District Parade Participant</li>
+        </div>
 
-<li>IEEE HackQuest Finalist</li>
 
-<li>Winner – Line Following Robot Competition</li>
+        <!-- K-MEANS -->
 
-<li>Winner – Egg Dropping Competition</li>
+        <div class="card">
 
-<li>Winner – Albatross Challenge</li>
+            <h3>
+                K-Means Clustering Demo
+            </h3>
 
-<li>Anchoring and Event Management Recognition</li>
+            <p>
+                Interactive step-by-step demonstration of
+                K-Means clustering, including distance
+                calculation, cluster assignment, mean
+                calculation, centroid updates, and convergence.
+            </p>
 
-</ul>
+            <a href="kmeans_demo.html"
+               target="_blank"
+               class="project-button kmeans-button">
+
+                Open K-Means Demo →
+
+            </a>
+
+        </div>
+
+
+        <!-- FUZZY C-MEANS -->
+
+        <div class="card">
+
+            <h3>
+                Fuzzy C-Means Clustering Demo
+            </h3>
+
+            <p>
+                Interactive demonstration of Fuzzy C-Means
+                clustering with membership values, distance
+                calculations, weighted means, centroid updates,
+                and convergence at every iteration.
+            </p>
+
+            <a href="fuzzy_c_means_demo.html"
+               target="_blank"
+               class="project-button fuzzy-button">
+
+                Open Fuzzy C-Means Demo →
+
+            </a>
+
+        </div>
+
+
+        <!-- MEDISCAN -->
+
+        <div class="card">
+
+            <h3>
+                MediScan – AI Powered Healthcare Application
+            </h3>
+
+            <p>
+                AI-based healthcare application developed
+                using machine learning and intelligent analysis.
+            </p>
+
+        </div>
+
+
+        <!-- REAL ESTATE -->
+
+        <div class="card">
+
+            <h3>
+                Real Estate Price Prediction
+            </h3>
+
+            <p>
+                Machine learning based real estate price
+                prediction system.
+            </p>
+
+        </div>
+
+
+        <!-- SPORTS CLASSIFICATION -->
+
+        <div class="card">
+
+            <h3>
+                Sports Celebrity Image Classification
+            </h3>
+
+            <p>
+                Computer vision and deep learning based
+                image classification project.
+            </p>
+
+        </div>
+
+
+        <!-- IOT -->
+
+        <div class="card">
+
+            <h3>
+                IoT Based Smart Solutions
+            </h3>
+
+            <p>
+                Internet of Things based solutions for
+                smart applications.
+            </p>
+
+        </div>
+
+
+        <!-- ROBOTICS -->
+
+        <div class="card">
+
+            <h3>
+                Robotics and Embedded Systems Projects
+            </h3>
+
+            <p>
+                Projects involving robotics, embedded systems,
+                automation, and intelligent control.
+            </p>
+
+        </div>
+
+    </div>
 
 </section>
+
+
+<!-- ================= LEADERSHIP ================= -->
 
 <section>
 
-<h2>Publications</h2>
+    <h2>Leadership & Activities</h2>
 
-<p>
-Research publications, conference papers, and scholarly contributions will be updated here as they become available.
-</p>
+    <ul>
+
+        <li>
+            Secretary – IEEE Student Branch RKGIT
+        </li>
+
+        <li>
+            Graphic Designer – IEEE Student Branch RKGIT
+        </li>
+
+        <li>
+            Academic Head – Light De Literacy
+        </li>
+
+        <li>
+            Anchoring and Event Management Activities
+        </li>
+
+        <li>
+            Volunteer and Student Leadership Initiatives
+        </li>
+
+    </ul>
 
 </section>
 
 
+<!-- ================= CERTIFICATIONS ================= -->
 
 <section>
 
-<h2>Contact</h2>
+    <h2>Certifications</h2>
 
-<p>Email: phd2501201003@iiti.ac.in</p>
+    <ul>
 
-<p>
-Department of Computer Science and Engineering<br>
-Indian Institute of Technology Indore
-</p>
+        <li>
+            AWS Machine Learning Certification
+        </li>
+
+        <li>
+            Infosys Springboard Certifications
+        </li>
+
+        <li>
+            IoT Internship Certification
+        </li>
+
+        <li>
+            Robotics Internship Certification
+        </li>
+
+        <li>
+            NCC B Certificate
+        </li>
+
+    </ul>
 
 </section>
+
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<section>
+
+    <h2>Achievements & Awards</h2>
+
+    <ul>
+
+        <li>
+            Ph.D. Research Scholar – IIT Indore
+        </li>
+
+        <li>
+            GATE CS Qualified
+        </li>
+
+        <li>
+            NCC B Certificate Holder
+        </li>
+
+        <li>
+            Rajya Puraskar (Scouts & Guides)
+        </li>
+
+        <li>
+            Best Drill Award
+        </li>
+
+        <li>
+            District Parade Participant
+        </li>
+
+        <li>
+            IEEE HackQuest Finalist
+        </li>
+
+        <li>
+            Winner – Line Following Robot Competition
+        </li>
+
+        <li>
+            Winner – Egg Dropping Competition
+        </li>
+
+        <li>
+            Winner – Albatross Challenge
+        </li>
+
+        <li>
+            Anchoring and Event Management Recognition
+        </li>
+
+    </ul>
+
+</section>
+
+
+<!-- ================= PUBLICATIONS ================= -->
+
+<section>
+
+    <h2>Publications</h2>
+
+    <p>
+        Research publications, conference papers, and scholarly
+        contributions will be updated here as they become available.
+    </p>
+
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+
+<section>
+
+    <h2>Contact</h2>
+
+    <p>
+        Email: phd2501201003@iiti.ac.in
+    </p>
+
+    <p>
+        Department of Computer Science and Engineering<br>
+        Indian Institute of Technology Indore
+    </p>
+
+</section>
+
 
 </div>
+
+
+<!-- ================= FOOTER ================= -->
 
 <footer>
 
-<p>© 2026 Avinash Dixit</p>
+    <p>
+        © 2026 Avinash Dixit
+    </p>
 
-<p>Ph.D. Research Scholar | Department of Computer Science and Engineering | IIT Indore</p>
+    <p>
+        Ph.D. Research Scholar |
+        Department of Computer Science and Engineering |
+        IIT Indore
+    </p>
 
 </footer>
+
 
 </body>
 </html>
