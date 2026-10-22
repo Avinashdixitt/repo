@@ -1,0 +1,3309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Fuzzy C-Means Clustering Demo</title>
+
+<style>
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f4f6f8;
+
+    color: #222;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+
+    background: #1f2937;
+
+    color: white;
+
+    padding: 22px 30px;
+}
+
+header h1 {
+
+    margin: 0;
+
+    font-size: 28px;
+}
+
+header p {
+
+    margin: 7px 0 0;
+
+    color: #d1d5db;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.container {
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    padding: 25px;
+}
+
+
+/* =========================================================
+   CONTROL PANEL
+========================================================= */
+
+.controls {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.08);
+
+    margin-bottom: 20px;
+}
+
+.controls h2 {
+
+    margin-top: 0;
+}
+
+.input-row {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    align-items: center;
+}
+
+input {
+
+    width: 90px;
+
+    padding: 10px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 7px;
+
+    font-size: 15px;
+}
+
+button {
+
+    padding: 10px 15px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+button:hover {
+
+    background: #1d4ed8;
+}
+
+button.green {
+
+    background: #059669;
+}
+
+button.orange {
+
+    background: #d97706;
+}
+
+button.gray {
+
+    background: #6b7280;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.main-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.15fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   CANVAS
+========================================================= */
+
+#plot {
+
+    width: 100%;
+
+    height: 600px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    background: #fafafa;
+}
+
+
+/* =========================================================
+   STEP
+========================================================= */
+
+.step-box {
+
+    background: #eef6ff;
+
+    border-left:
+        5px solid #2563eb;
+
+    padding: 15px;
+
+    margin-bottom: 15px;
+
+    border-radius: 5px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+
+    font-weight: bold;
+
+    padding: 10px;
+
+    margin-top: 10px;
+
+    border-radius: 6px;
+}
+
+.status.waiting {
+
+    background: #f3f4f6;
+
+    color: #374151;
+}
+
+.status.running {
+
+    background: #dbeafe;
+
+    color: #1e40af;
+}
+
+.status.done {
+
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-container {
+
+    overflow-x: auto;
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 12px;
+}
+
+th,
+td {
+
+    border: 1px solid #ddd;
+
+    padding: 8px;
+
+    text-align: center;
+}
+
+th {
+
+    background: #f1f5f9;
+}
+
+
+/* =========================================================
+   CENTROID
+========================================================= */
+
+.centroid-box {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(150px, 1fr));
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.centroid {
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    border: 1px solid #ddd;
+}
+
+
+/* =========================================================
+   FORMULA
+========================================================= */
+
+.formula {
+
+    background: #f8fafc;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    margin-top: 10px;
+
+    font-family:
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MEMBERSHIP COLORS
+========================================================= */
+
+.high-membership {
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   EXPLANATION
+========================================================= */
+
+.explanation {
+
+    background: #fffbeb;
+
+    border-left:
+        5px solid #f59e0b;
+
+    padding: 15px;
+
+    margin-top: 20px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 900px) {
+
+    .main-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    #plot {
+
+        height: 450px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>
+    Fuzzy C-Means Clustering
+    — Step-by-Step Demo
+</h1>
+
+<p>
+    Interactive visualization of membership,
+    distance, weighted mean and centroid update
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
+<div class="controls">
+
+<h2>1. Enter Data Points</h2>
+
+<div class="input-row">
+
+<label>
+
+X:
+
+<input
+    type="number"
+    id="xInput"
+    value="2"
+>
+
+</label>
+
+
+<label>
+
+Y:
+
+<input
+    type="number"
+    id="yInput"
+    value="3"
+>
+
+</label>
+
+
+<button onclick="addPoint()">
+
+Add Point
+
+</button>
+
+
+<button
+    class="gray"
+    onclick="loadExample()"
+>
+
+Load Example Dataset
+
+</button>
+
+
+<button
+    class="gray"
+    onclick="clearData()"
+>
+
+Clear Data
+
+</button>
+
+</div>
+
+
+<br>
+
+
+<h2>2. Fuzzy C-Means Parameters</h2>
+
+
+<div class="input-row">
+
+
+<label>
+
+Number of Clusters C:
+
+<input
+    type="number"
+    id="clusterInput"
+    value="2"
+    min="1"
+    max="5"
+>
+
+</label>
+
+
+<label>
+
+Fuzziness m:
+
+<input
+    type="number"
+    id="mInput"
+    value="2"
+    min="1.01"
+    step="0.1"
+>
+
+</label>
+
+
+<button onclick="initializeFCM()">
+
+Initialize
+
+</button>
+
+
+<button
+    class="green"
+    onclick="nextStep()"
+>
+
+Next Step →
+
+</button>
+
+
+<button
+    class="orange"
+    onclick="runAll()"
+>
+
+Run All
+
+</button>
+
+
+<button
+    class="gray"
+    onclick="resetFCM()"
+>
+
+Reset
+
+</button>
+
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN AREA
+===================================================== -->
+
+<div class="main-grid">
+
+
+<!-- =====================================================
+     LEFT
+===================================================== -->
+
+<div>
+
+<div class="card">
+
+<h2>
+    Fuzzy C-Means Visualization
+</h2>
+
+<canvas id="plot"></canvas>
+
+<div id="legend"></div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     RIGHT
+===================================================== -->
+
+<div>
+
+
+<div class="card">
+
+<h2>
+    Current Step
+</h2>
+
+<div
+    id="stepDescription"
+    class="step-box"
+>
+
+<h3>Waiting...</h3>
+
+<p>
+Add data points and initialize Fuzzy C-Means.
+</p>
+
+</div>
+
+
+<div
+    id="status"
+    class="status waiting"
+>
+
+Waiting for initialization
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<div class="card">
+
+<h2>
+    Current Cluster Centers
+</h2>
+
+<div
+    id="centroids"
+    class="centroid-box"
+>
+
+No centroids yet.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<!-- =====================================================
+     DISTANCE
+===================================================== -->
+
+<div class="card">
+
+<h2>
+    Step 1 — Distance Matrix
+</h2>
+
+<div
+    id="distanceTable"
+    class="table-container"
+>
+
+Distance calculations will appear here.
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<!-- =====================================================
+     MEMBERSHIP
+===================================================== -->
+
+<div class="card">
+
+<h2>
+    Step 2 — Membership Matrix
+</h2>
+
+
+<div class="formula">
+
+u<sub>ij</sub> =
+1 /
+Σ<sub>k</sub>
+(d<sub>ij</sub> /
+d<sub>ik</sub>)<sup>2/(m−1)</sup>
+
+</div>
+
+
+<div
+    id="membershipTable"
+    class="table-container"
+>
+
+Membership values will appear here.
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<!-- =====================================================
+     MEMBERSHIP CALCULATION
+===================================================== -->
+
+<div class="card">
+
+<h2>
+    Step 3 — Membership Calculation
+</h2>
+
+<div
+    id="membershipCalculation"
+>
+
+Detailed membership calculations will appear here.
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<!-- =====================================================
+     CENTROID CALCULATION
+===================================================== -->
+
+<div class="card">
+
+<h2>
+    Step 4 — New Centroid Calculation
+</h2>
+
+
+<div class="formula">
+
+v<sub>j</sub> =
+
+Σ u<sub>ij</sub><sup>m</sup>x<sub>i</sub>
+
+/
+
+Σ u<sub>ij</sub><sup>m</sup>
+
+</div>
+
+
+<div
+    id="centroidCalculation"
+>
+
+Centroid calculations will appear here.
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<!-- =====================================================
+     DATA TABLE
+===================================================== -->
+
+<div class="card">
+
+<h2>
+    Data Points
+</h2>
+
+
+<div
+    id="dataTable"
+    class="table-container"
+>
+
+No data points.
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     EXPLANATION
+===================================================== -->
+
+<div class="explanation">
+
+<h3>
+    How Fuzzy C-Means Works
+</h3>
+
+
+<b>Step 1 — Initialize:</b>
+
+Choose C cluster centers.
+
+
+<br><br>
+
+
+<b>Step 2 — Calculate distance:</b>
+
+Calculate the distance between
+each point and every cluster center.
+
+
+<br><br>
+
+
+<b>Step 3 — Calculate membership:</b>
+
+Unlike K-Means, a point does not
+belong completely to one cluster.
+
+Instead it has a membership value
+for every cluster.
+
+
+<br><br>
+
+
+For example:
+
+<br>
+
+Point P1:
+
+Cluster 1 = 0.80
+
+<br>
+
+Cluster 2 = 0.20
+
+
+<br><br>
+
+
+<b>Step 4 — Calculate new centers:</b>
+
+The cluster centers are calculated
+using the membership-weighted mean.
+
+
+<br><br>
+
+
+<b>Step 5 — Repeat:</b>
+
+Update memberships and cluster
+centers until the centers stop changing.
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let points = [];
+
+let centroids = [];
+
+let memberships = [];
+
+let distances = [];
+
+let iteration = 0;
+
+let initialized = false;
+
+let converged = false;
+
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+const colors = [
+
+    "#ef4444",
+
+    "#22c55e",
+
+    "#3b82f6",
+
+    "#f59e0b",
+
+    "#a855f7"
+
+];
+
+
+/* =========================================================
+   ADD POINT
+========================================================= */
+
+function addPoint() {
+
+    const x =
+        parseFloat(
+            document.getElementById(
+                "xInput"
+            ).value
+        );
+
+    const y =
+        parseFloat(
+            document.getElementById(
+                "yInput"
+            ).value
+        );
+
+
+    if (
+        isNaN(x) ||
+        isNaN(y)
+    ) {
+
+        alert(
+            "Please enter valid X and Y values."
+        );
+
+        return;
+    }
+
+
+    points.push({
+
+        x: x,
+
+        y: y
+
+    });
+
+
+    initialized = false;
+
+
+    updateDataTable();
+
+    drawPlot();
+
+}
+
+
+/* =========================================================
+   LOAD EXAMPLE
+========================================================= */
+
+function loadExample() {
+
+    points = [
+
+        {x: 1, y: 2},
+
+        {x: 2, y: 1},
+
+        {x: 2, y: 3},
+
+        {x: 3, y: 2},
+
+        {x: 8, y: 8},
+
+        {x: 9, y: 7},
+
+        {x: 8, y: 9},
+
+        {x: 10, y: 8}
+
+    ];
+
+
+    document.getElementById(
+        "clusterInput"
+    ).value = 2;
+
+
+    document.getElementById(
+        "mInput"
+    ).value = 2;
+
+
+    initialized = false;
+
+
+    updateDataTable();
+
+    drawPlot();
+
+}
+
+
+/* =========================================================
+   CLEAR DATA
+========================================================= */
+
+function clearData() {
+
+    points = [];
+
+    centroids = [];
+
+    memberships = [];
+
+    distances = [];
+
+    iteration = 0;
+
+    initialized = false;
+
+    converged = false;
+
+
+    updateDataTable();
+
+    drawPlot();
+
+
+    document.getElementById(
+        "centroids"
+    ).innerHTML =
+        "No centroids yet.";
+
+
+    document.getElementById(
+        "distanceTable"
+    ).innerHTML =
+        "Distance calculations will appear here.";
+
+
+    document.getElementById(
+        "membershipTable"
+    ).innerHTML =
+        "Membership values will appear here.";
+
+
+    document.getElementById(
+        "membershipCalculation"
+    ).innerHTML =
+        "Detailed membership calculations will appear here.";
+
+
+    document.getElementById(
+        "centroidCalculation"
+    ).innerHTML =
+        "Centroid calculations will appear here.";
+
+
+    document.getElementById(
+        "stepDescription"
+    ).innerHTML = `
+
+        <h3>Waiting...</h3>
+
+        <p>
+        Add data points and initialize
+        Fuzzy C-Means.
+        </p>
+
+    `;
+
+}
+
+
+/* =========================================================
+   INITIALIZE FCM
+========================================================= */
+
+function initializeFCM() {
+
+    if (points.length === 0) {
+
+        alert(
+            "Please add data points first."
+        );
+
+        return;
+    }
+
+
+    const c =
+        parseInt(
+            document.getElementById(
+                "clusterInput"
+            ).value
+        );
+
+
+    const m =
+        parseFloat(
+            document.getElementById(
+                "mInput"
+            ).value
+        );
+
+
+    if (
+        c < 1 ||
+        c > points.length
+    ) {
+
+        alert(
+            "Number of clusters must be valid."
+        );
+
+        return;
+    }
+
+
+    if (m <= 1) {
+
+        alert(
+            "Fuzziness parameter m must be greater than 1."
+        );
+
+        return;
+    }
+
+
+    /*
+       INITIAL CENTROIDS
+
+       Select first C points.
+    */
+
+    centroids = [];
+
+
+    for (
+        let j = 0;
+        j < c;
+        j++
+    ) {
+
+        centroids.push({
+
+            x: points[j].x,
+
+            y: points[j].y
+
+        });
+
+    }
+
+
+    /*
+       Initial membership matrix
+    */
+
+    memberships =
+        createInitialMemberships();
+
+
+    distances = [];
+
+    iteration = 0;
+
+    initialized = true;
+
+    converged = false;
+
+
+    updateCentroidsDisplay();
+
+    drawPlot();
+
+
+    document.getElementById(
+        "stepDescription"
+    ).innerHTML = `
+
+        <h3>
+            Initialization
+        </h3>
+
+        <p>
+
+        Number of clusters:
+
+        <b>${c}</b>
+
+        </p>
+
+
+        <p>
+
+        Fuzziness parameter:
+
+        <b>m = ${m}</b>
+
+        </p>
+
+
+        <p>
+
+        Initial cluster centers
+        have been selected.
+
+        </p>
+
+
+        <p>
+
+        Click
+
+        <b>Next Step</b>
+
+        to calculate distances.
+
+        </p>
+
+    `;
+
+
+    document.getElementById(
+        "status"
+    ).className =
+        "status running";
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "FCM initialized.";
+
+
+}
+
+
+/* =========================================================
+   INITIAL MEMBERSHIP
+========================================================= */
+
+function createInitialMemberships() {
+
+    const c =
+        centroids.length;
+
+
+    let matrix = [];
+
+
+    for (
+        let i = 0;
+        i < points.length;
+        i++
+    ) {
+
+        let row = [];
+
+        for (
+            let j = 0;
+            j < c;
+            j++
+        ) {
+
+            row.push(
+                1 / c
+            );
+
+        }
+
+        matrix.push(row);
+
+    }
+
+
+    return matrix;
+
+}
+
+
+/* =========================================================
+   NEXT STEP
+========================================================= */
+
+function nextStep() {
+
+    if (!initialized) {
+
+        alert(
+            "Initialize Fuzzy C-Means first."
+        );
+
+        return;
+    }
+
+
+    if (converged) {
+
+        alert(
+            "FCM has already converged."
+        );
+
+        return;
+    }
+
+
+    iteration++;
+
+
+    const m =
+        parseFloat(
+            document.getElementById(
+                "mInput"
+            ).value
+        );
+
+
+    /*
+       =====================================================
+       STEP 1
+       CALCULATE DISTANCES
+       =====================================================
+    */
+
+    distances =
+        calculateDistances();
+
+
+    showDistanceTable();
+
+
+    /*
+       =====================================================
+       STEP 2
+       CALCULATE MEMBERSHIPS
+       =====================================================
+    */
+
+    const oldMemberships =
+        JSON.parse(
+            JSON.stringify(
+                memberships
+            )
+        );
+
+
+    memberships =
+        calculateMemberships(
+            distances,
+            m
+        );
+
+
+    showMembershipTable();
+
+
+    showMembershipCalculations(
+        distances,
+        memberships,
+        m
+    );
+
+
+    /*
+       =====================================================
+       STEP 3
+       CALCULATE NEW CENTROIDS
+       =====================================================
+    */
+
+    const newCentroids =
+        calculateNewCentroids(
+            memberships,
+            m
+        );
+
+
+    showCentroidCalculations(
+        memberships,
+        newCentroids,
+        m
+    );
+
+
+    /*
+       =====================================================
+       CHECK CONVERGENCE
+       =====================================================
+    */
+
+    let change = 0;
+
+
+    for (
+        let i = 0;
+        i < memberships.length;
+        i++
+    ) {
+
+        for (
+            let j = 0;
+            j < memberships[i].length;
+            j++
+        ) {
+
+            change =
+                Math.max(
+
+                    change,
+
+                    Math.abs(
+
+                        memberships[i][j] -
+                        oldMemberships[i][j]
+
+                    )
+
+                );
+
+        }
+
+    }
+
+
+    const oldCentroids =
+        centroids;
+
+
+    centroids =
+        newCentroids;
+
+
+    updateCentroidsDisplay();
+
+    drawPlot();
+
+
+    /*
+       STEP DESCRIPTION
+    */
+
+    document.getElementById(
+        "stepDescription"
+    ).innerHTML = `
+
+        <h3>
+            Iteration ${iteration}
+        </h3>
+
+
+        <p>
+
+        <b>Step 1:</b>
+
+        Calculate Euclidean distance
+        between each point and
+        every cluster center.
+
+        </p>
+
+
+        <p>
+
+        <b>Step 2:</b>
+
+        Calculate fuzzy membership
+        values.
+
+        </p>
+
+
+        <p>
+
+        <b>Step 3:</b>
+
+        Calculate new cluster centers
+        using membership-weighted means.
+
+        </p>
+
+
+        <p>
+
+        <b>Membership change:</b>
+
+        ${change.toFixed(6)}
+
+        </p>
+
+    `;
+
+
+    /*
+       CONVERGENCE
+    */
+
+    if (
+        change < 0.0001
+    ) {
+
+        converged = true;
+
+
+        document.getElementById(
+            "status"
+        ).className =
+            "status done";
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "✓ Fuzzy C-Means converged!";
+
+
+        document.getElementById(
+            "stepDescription"
+        ).innerHTML += `
+
+            <div class="explanation">
+
+                <b>
+                    Convergence reached!
+                </b>
+
+                <br><br>
+
+                Membership values are no
+                longer changing significantly.
+
+                Therefore the algorithm
+                has stopped.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   CALCULATE DISTANCES
+========================================================= */
+
+function calculateDistances() {
+
+    let result = [];
+
+
+    for (
+        let i = 0;
+        i < points.length;
+        i++
+    ) {
+
+        let row = [];
+
+
+        for (
+            let j = 0;
+            j < centroids.length;
+            j++
+        ) {
+
+            const dx =
+                points[i].x -
+                centroids[j].x;
+
+
+            const dy =
+                points[i].y -
+                centroids[j].y;
+
+
+            const distance =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+
+            row.push(distance);
+
+        }
+
+
+        result.push(row);
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP CALCULATION
+========================================================= */
+
+function calculateMemberships(
+    distances,
+    m
+) {
+
+    const c =
+        centroids.length;
+
+
+    let result = [];
+
+
+    for (
+        let i = 0;
+        i < points.length;
+        i++
+    ) {
+
+        let row = [];
+
+
+        /*
+           Special case:
+           point exactly at centroid
+        */
+
+        const zeroIndex =
+            distances[i].findIndex(
+                d => d === 0
+            );
+
+
+        if (
+            zeroIndex !== -1
+        ) {
+
+            for (
+                let j = 0;
+                j < c;
+                j++
+            ) {
+
+                row.push(
+                    j === zeroIndex
+                        ? 1
+                        : 0
+                );
+
+            }
+
+
+            result.push(row);
+
+            continue;
+
+        }
+
+
+        /*
+           Standard FCM formula
+        */
+
+        for (
+            let j = 0;
+            j < c;
+            j++
+        ) {
+
+            let denominator = 0;
+
+
+            for (
+                let k = 0;
+                k < c;
+                k++
+            ) {
+
+                denominator +=
+
+                    Math.pow(
+
+                        distances[i][j] /
+                        distances[i][k],
+
+                        2 / (m - 1)
+
+                    );
+
+            }
+
+
+            row.push(
+                1 / denominator
+            );
+
+        }
+
+
+        result.push(row);
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   NEW CENTROIDS
+========================================================= */
+
+function calculateNewCentroids(
+    membership,
+    m
+) {
+
+    const c =
+        centroids.length;
+
+
+    let newCentroids = [];
+
+
+    for (
+        let j = 0;
+        j < c;
+        j++
+    ) {
+
+        let numeratorX = 0;
+
+        let numeratorY = 0;
+
+        let denominator = 0;
+
+
+        for (
+            let i = 0;
+            i < points.length;
+            i++
+        ) {
+
+            const weight =
+                Math.pow(
+                    membership[i][j],
+                    m
+                );
+
+
+            numeratorX +=
+                weight *
+                points[i].x;
+
+
+            numeratorY +=
+                weight *
+                points[i].y;
+
+
+            denominator +=
+                weight;
+
+        }
+
+
+        newCentroids.push({
+
+            x:
+                numeratorX /
+                denominator,
+
+            y:
+                numeratorY /
+                denominator
+
+        });
+
+    }
+
+
+    return newCentroids;
+
+}
+
+
+/* =========================================================
+   DISTANCE TABLE
+========================================================= */
+
+function showDistanceTable() {
+
+    let html =
+        "<table>";
+
+
+    html += `
+
+        <tr>
+
+            <th>Point</th>
+
+            <th>X</th>
+
+            <th>Y</th>
+
+    `;
+
+
+    for (
+        let j = 0;
+        j < centroids.length;
+        j++
+    ) {
+
+        html += `
+
+            <th>
+                Distance to C${j + 1}
+            </th>
+
+        `;
+
+    }
+
+
+    html += "</tr>";
+
+
+    for (
+        let i = 0;
+        i < points.length;
+        i++
+    ) {
+
+        html += `
+
+            <tr>
+
+                <td>
+                    P${i + 1}
+                </td>
+
+                <td>
+                    ${points[i].x}
+                </td>
+
+                <td>
+                    ${points[i].y}
+                </td>
+
+        `;
+
+
+        for (
+            let j = 0;
+            j < centroids.length;
+            j++
+        ) {
+
+            html += `
+
+                <td>
+
+                    ${distances[i][j]
+                        .toFixed(4)}
+
+                </td>
+
+            `;
+
+        }
+
+
+        html += "</tr>";
+
+    }
+
+
+    html += "</table>";
+
+
+    document.getElementById(
+        "distanceTable"
+    ).innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP TABLE
+========================================================= */
+
+function showMembershipTable() {
+
+    let html =
+        "<table>";
+
+
+    html += `
+
+        <tr>
+
+            <th>Point</th>
+
+    `;
+
+
+    for (
+        let j = 0;
+        j < centroids.length;
+        j++
+    ) {
+
+        html += `
+
+            <th>
+                u${j + 1}
+            </th>
+
+        `;
+
+    }
+
+
+    html += `
+
+        </tr>
+
+    `;
+
+
+    for (
+        let i = 0;
+        i < points.length;
+        i++
+    ) {
+
+        html += `
+
+            <tr>
+
+                <td>
+                    P${i + 1}
+                </td>
+
+        `;
+
+
+        for (
+            let j = 0;
+            j < centroids.length;
+            j++
+        ) {
+
+            const value =
+                memberships[i][j];
+
+
+            html += `
+
+                <td
+                    style="
+                    background:
+                    ${getMembershipColor(value)}
+                    "
+                >
+
+                    <b>
+                    ${value.toFixed(4)}
+                    </b>
+
+                </td>
+
+            `;
+
+        }
+
+
+        html += "</tr>";
+
+    }
+
+
+    html += "</table>";
+
+
+    document.getElementById(
+        "membershipTable"
+    ).innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP COLOR
+========================================================= */
+
+function getMembershipColor(
+    value
+) {
+
+    const alpha =
+        0.15 +
+        value * 0.65;
+
+
+    return `rgba(37,99,235,${alpha})`;
+
+}
+
+
+/* =========================================================
+   DETAILED MEMBERSHIP CALCULATIONS
+========================================================= */
+
+function showMembershipCalculations(
+    distances,
+    membership,
+    m
+) {
+
+    let html = "";
+
+
+    const limit =
+        Math.min(
+            points.length,
+            4
+        );
+
+
+    for (
+        let i = 0;
+        i < limit;
+        i++
+    ) {
+
+        html += `
+
+            <div class="step-box">
+
+                <h3>
+                    Point P${i + 1}
+                </h3>
+
+                <p>
+
+                For Cluster 1:
+
+                </p>
+
+        `;
+
+
+        for (
+            let j = 0;
+            j < centroids.length;
+            j++
+        ) {
+
+            html += `
+
+                <p>
+
+                <b>
+                    u(P${i + 1}, C${j + 1})
+                </b>
+
+                =
+
+                1 / [
+
+                `;
+
+
+            for (
+                let k = 0;
+                k < centroids.length;
+                k++
+            ) {
+
+                html += `
+
+                    (
+                    ${distances[i][j].toFixed(3)}
+                    /
+                    ${distances[i][k].toFixed(3)}
+                    )
+
+                    <sup>
+                    ${(
+                        2 / (m - 1)
+                    ).toFixed(2)}
+                    </sup>
+
+                `;
+
+
+                if (
+                    k <
+                    centroids.length - 1
+                ) {
+
+                    html += " + ";
+
+                }
+
+            }
+
+
+            html += `
+
+                ]
+
+                =
+
+                <b>
+                ${membership[i][j]
+                    .toFixed(4)}
+                </b>
+
+                </p>
+
+            `;
+
+        }
+
+
+        html += "</div>";
+
+    }
+
+
+    if (
+        points.length > limit
+    ) {
+
+        html += `
+
+            <p>
+
+            Showing detailed calculations
+            for the first ${limit} points.
+
+            The complete membership matrix
+            is shown above.
+
+            </p>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "membershipCalculation"
+    ).innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   CENTROID CALCULATION DISPLAY
+========================================================= */
+
+function showCentroidCalculations(
+    membership,
+    newCentroids,
+    m
+) {
+
+    let html = "";
+
+
+    for (
+        let j = 0;
+        j < centroids.length;
+        j++
+    ) {
+
+        let numeratorX = 0;
+
+        let numeratorY = 0;
+
+        let denominator = 0;
+
+
+        let termsX = [];
+
+        let termsY = [];
+
+        let termsWeight = [];
+
+
+        for (
+            let i = 0;
+            i < points.length;
+            i++
+        ) {
+
+            const weight =
+                Math.pow(
+                    membership[i][j],
+                    m
+                );
+
+
+            numeratorX +=
+                weight *
+                points[i].x;
+
+
+            numeratorY +=
+                weight *
+                points[i].y;
+
+
+            denominator +=
+                weight;
+
+
+            termsX.push(
+
+                `(${weight.toFixed(3)} × ${points[i].x})`
+
+            );
+
+
+            termsY.push(
+
+                `(${weight.toFixed(3)} × ${points[i].y})`
+
+            );
+
+
+            termsWeight.push(
+
+                weight.toFixed(3)
+
+            );
+
+        }
+
+
+        html += `
+
+            <div class="step-box">
+
+                <h3>
+                    New Centroid C${j + 1}
+                </h3>
+
+
+                <p>
+
+                <b>
+                Membership weights:
+                </b>
+
+                ${termsWeight.join(", ")}
+
+                </p>
+
+
+                <p>
+
+                <b>
+                X coordinate:
+                </b>
+
+                </p>
+
+
+                <p>
+
+                [
+
+                ${termsX.join(" + ")}
+
+                ]
+
+                /
+
+                [
+
+                ${termsWeight.join(" + ")}
+
+                ]
+
+                =
+
+                <b>
+
+                ${newCentroids[j].x.toFixed(4)}
+
+                </b>
+
+                </p>
+
+
+                <p>
+
+                <b>
+                Y coordinate:
+                </b>
+
+                </p>
+
+
+                <p>
+
+                [
+
+                ${termsY.join(" + ")}
+
+                ]
+
+                /
+
+                [
+
+                ${termsWeight.join(" + ")}
+
+                ]
+
+                =
+
+                <b>
+
+                ${newCentroids[j].y.toFixed(4)}
+
+                </b>
+
+                </p>
+
+
+                <p>
+
+                Therefore:
+
+                <b>
+
+                C${j + 1}
+
+                =
+
+                (
+
+                ${newCentroids[j].x.toFixed(4)},
+
+                ${newCentroids[j].y.toFixed(4)}
+
+                )
+
+                </b>
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "centroidCalculation"
+    ).innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   CENTROID DISPLAY
+========================================================= */
+
+function updateCentroidsDisplay() {
+
+    if (
+        centroids.length === 0
+    ) {
+
+        document.getElementById(
+            "centroids"
+        ).innerHTML =
+            "No centroids yet.";
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    centroids.forEach(
+        (c, i) => {
+
+            html += `
+
+                <div
+                    class="centroid"
+                    style="
+                    border-left:
+                    5px solid
+                    ${colors[i]}
+                    "
+                >
+
+                    <b>
+                        C${i + 1}
+                    </b>
+
+                    <br><br>
+
+                    X =
+                    ${c.x.toFixed(4)}
+
+                    <br>
+
+                    Y =
+                    ${c.y.toFixed(4)}
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    document.getElementById(
+        "centroids"
+    ).innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   DATA TABLE
+========================================================= */
+
+function updateDataTable() {
+
+    if (
+        points.length === 0
+    ) {
+
+        document.getElementById(
+            "dataTable"
+        ).innerHTML =
+            "No data points.";
+
+        return;
+
+    }
+
+
+    let html =
+        "<table>";
+
+
+    html += `
+
+        <tr>
+
+            <th>Point</th>
+
+            <th>X</th>
+
+            <th>Y</th>
+
+    `;
+
+
+    if (
+        memberships.length > 0
+    ) {
+
+        for (
+            let j = 0;
+            j < centroids.length;
+            j++
+        ) {
+
+            html += `
+
+                <th>
+                    Membership C${j + 1}
+                </th>
+
+            `;
+
+        }
+
+    }
+
+
+    html += "</tr>";
+
+
+    points.forEach(
+        (p, i) => {
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        P${i + 1}
+                    </td>
+
+                    <td>
+                        ${p.x}
+                    </td>
+
+                    <td>
+                        ${p.y}
+                    </td>
+
+            `;
+
+
+            if (
+                memberships.length > 0
+            ) {
+
+                for (
+                    let j = 0;
+                    j < centroids.length;
+                    j++
+                ) {
+
+                    html += `
+
+                        <td>
+
+                        ${memberships[i][j]
+                            .toFixed(4)}
+
+                        </td>
+
+                    `;
+
+                }
+
+            }
+
+
+            html += "</tr>";
+
+        }
+    );
+
+
+    html += "</table>";
+
+
+    document.getElementById(
+        "dataTable"
+    ).innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   RUN ALL
+========================================================= */
+
+function runAll() {
+
+    if (!initialized) {
+
+        initializeFCM();
+
+    }
+
+
+    let safety = 0;
+
+
+    while (
+        !converged &&
+        safety < 100
+    ) {
+
+        nextStep();
+
+        safety++;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetFCM() {
+
+    centroids = [];
+
+    memberships = [];
+
+    distances = [];
+
+    iteration = 0;
+
+    initialized = false;
+
+    converged = false;
+
+
+    updateDataTable();
+
+    drawPlot();
+
+
+    document.getElementById(
+        "centroids"
+    ).innerHTML =
+        "No centroids yet.";
+
+
+    document.getElementById(
+        "distanceTable"
+    ).innerHTML =
+        "Distance calculations will appear here.";
+
+
+    document.getElementById(
+        "membershipTable"
+    ).innerHTML =
+        "Membership values will appear here.";
+
+
+    document.getElementById(
+        "membershipCalculation"
+    ).innerHTML =
+        "Detailed membership calculations will appear here.";
+
+
+    document.getElementById(
+        "centroidCalculation"
+    ).innerHTML =
+        "Centroid calculations will appear here.";
+
+
+    document.getElementById(
+        "stepDescription"
+    ).innerHTML = `
+
+        <h3>
+            Waiting...
+        </h3>
+
+        <p>
+        Initialize Fuzzy C-Means to begin.
+        </p>
+
+    `;
+
+
+    document.getElementById(
+        "status"
+    ).className =
+        "status waiting";
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "Waiting for initialization";
+
+}
+
+
+/* =========================================================
+   DRAW PLOT
+========================================================= */
+
+function drawPlot() {
+
+    const canvas =
+        document.getElementById(
+            "plot"
+        );
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    canvas.width =
+        rect.width *
+        window.devicePixelRatio;
+
+
+    canvas.height =
+        rect.height *
+        window.devicePixelRatio;
+
+
+    ctx.scale(
+
+        window.devicePixelRatio,
+
+        window.devicePixelRatio
+
+    );
+
+
+    const width =
+        rect.width;
+
+
+    const height =
+        rect.height;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    if (
+        points.length === 0
+    ) {
+
+        ctx.fillStyle =
+            "#777";
+
+        ctx.font =
+            "18px Arial";
+
+        ctx.textAlign =
+            "center";
+
+        ctx.fillText(
+
+            "Add data points to begin",
+
+            width / 2,
+
+            height / 2
+
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Find ranges
+    */
+
+    let minX =
+        Math.min(
+            ...points.map(
+                p => p.x
+            )
+        );
+
+
+    let maxX =
+        Math.max(
+            ...points.map(
+                p => p.x
+            )
+        );
+
+
+    let minY =
+        Math.min(
+            ...points.map(
+                p => p.y
+            )
+        );
+
+
+    let maxY =
+        Math.max(
+            ...points.map(
+                p => p.y
+            )
+        );
+
+
+    if (
+        centroids.length > 0
+    ) {
+
+        minX =
+            Math.min(
+                minX,
+                ...centroids.map(
+                    c => c.x
+                )
+            );
+
+
+        maxX =
+            Math.max(
+                maxX,
+                ...centroids.map(
+                    c => c.x
+                )
+            );
+
+
+        minY =
+            Math.min(
+                minY,
+                ...centroids.map(
+                    c => c.y
+                )
+            );
+
+
+        maxY =
+            Math.max(
+                maxY,
+                ...centroids.map(
+                    c => c.y
+                )
+            );
+
+    }
+
+
+    const padding = 60;
+
+
+    const rangeX =
+        Math.max(
+            maxX - minX,
+            1
+        );
+
+
+    const rangeY =
+        Math.max(
+            maxY - minY,
+            1
+        );
+
+
+    function mapX(x) {
+
+        return padding +
+
+            ((x - minX) / rangeX) *
+
+            (width - 2 * padding);
+
+    }
+
+
+    function mapY(y) {
+
+        return height -
+
+            padding -
+
+            ((y - minY) / rangeY) *
+
+            (height - 2 * padding);
+
+    }
+
+
+    /*
+       GRID
+    */
+
+    ctx.strokeStyle =
+        "#e5e7eb";
+
+    ctx.lineWidth = 1;
+
+
+    for (
+        let i = 0;
+        i <= 10;
+        i++
+    ) {
+
+        const x =
+
+            padding +
+
+            i *
+            (width - 2 * padding) /
+            10;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            padding
+        );
+
+        ctx.lineTo(
+            x,
+            height - padding
+        );
+
+        ctx.stroke();
+
+
+        const y =
+
+            padding +
+
+            i *
+            (height - 2 * padding) /
+            10;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            padding,
+            y
+        );
+
+        ctx.lineTo(
+            width - padding,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /*
+       AXES
+    */
+
+    ctx.strokeStyle =
+        "#333";
+
+    ctx.lineWidth = 2;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padding,
+        height - padding
+    );
+
+    ctx.lineTo(
+        width - padding,
+        height - padding
+    );
+
+    ctx.stroke();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padding,
+        padding
+    );
+
+    ctx.lineTo(
+        padding,
+        height - padding
+    );
+
+    ctx.stroke();
+
+
+    /*
+       DATA POINTS
+    */
+
+    points.forEach(
+        (p, i) => {
+
+            const x =
+                mapX(p.x);
+
+            const y =
+                mapY(p.y);
+
+
+            /*
+               Find strongest membership
+            */
+
+            let strongest =
+                -1;
+
+
+            if (
+                memberships.length > 0
+            ) {
+
+                strongest =
+                    memberships[i]
+                        .indexOf(
+                            Math.max(
+                                ...memberships[i]
+                            )
+                        );
+
+            }
+
+
+            /*
+               Point
+            */
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                9,
+                0,
+                2 * Math.PI
+            );
+
+
+            if (
+                strongest >= 0
+            ) {
+
+                ctx.fillStyle =
+                    colors[strongest];
+
+            }
+
+            else {
+
+                ctx.fillStyle =
+                    "#64748b";
+
+            }
+
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#111";
+
+            ctx.lineWidth = 1;
+
+            ctx.stroke();
+
+
+            /*
+               Label
+            */
+
+            ctx.fillStyle =
+                "#111";
+
+            ctx.font =
+                "12px Arial";
+
+            ctx.textAlign =
+                "left";
+
+
+            ctx.fillText(
+
+                "P" + (i + 1),
+
+                x + 11,
+
+                y - 10
+
+            );
+
+        }
+    );
+
+
+    /*
+       CENTROIDS
+    */
+
+    centroids.forEach(
+        (c, i) => {
+
+            const x =
+                mapX(c.x);
+
+            const y =
+                mapY(c.y);
+
+
+            ctx.strokeStyle =
+                colors[i];
+
+            ctx.lineWidth = 4;
+
+
+            /*
+               X symbol
+            */
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                x - 13,
+                y - 13
+            );
+
+
+            ctx.lineTo(
+                x + 13,
+                y + 13
+            );
+
+
+            ctx.moveTo(
+                x + 13,
+                y - 13
+            );
+
+
+            ctx.lineTo(
+                x - 13,
+                y + 13
+            );
+
+
+            ctx.stroke();
+
+
+            ctx.fillStyle =
+                colors[i];
+
+            ctx.font =
+                "bold 14px Arial";
+
+            ctx.textAlign =
+                "left";
+
+
+            ctx.fillText(
+
+                "C" + (i + 1),
+
+                x + 15,
+
+                y + 5
+
+            );
+
+        }
+    );
+
+
+    /*
+       LEGEND
+    */
+
+    let legend = "";
+
+
+    centroids.forEach(
+        (c, i) => {
+
+            legend += `
+
+                <span
+                    style="
+                    display:inline-block;
+                    margin:10px;
+                    "
+                >
+
+                    <span
+                        style="
+                        display:inline-block;
+                        width:15px;
+                        height:15px;
+                        border-radius:50%;
+                        background:
+                        ${colors[i]};
+                        margin-right:5px;
+                        "
+                    ></span>
+
+                    Cluster ${i + 1}
+
+                </span>
+
+            `;
+
+        }
+    );
+
+
+    legend += `
+
+        <span
+            style="
+            display:inline-block;
+            margin:10px;
+            "
+        >
+
+            ✕ Centroid
+
+        </span>
+
+    `;
+
+
+    document.getElementById(
+        "legend"
+    ).innerHTML =
+        legend;
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    drawPlot
+);
+
+
+/* =========================================================
+   INITIAL DRAW
+========================================================= */
+
+drawPlot();
+
+</script>
+
+
+</body>
+
+</html>
